@@ -4,7 +4,7 @@ namespace Database\Factories\Products;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
- 
+
 class BrandFactory extends Factory
 {
     /**
@@ -15,11 +15,7 @@ class BrandFactory extends Factory
     public function definition(): array
     {
         return [
-            'brand_name' => [
-                'en' => $this->faker->word,
-                'ar' => $this->faker->word,
-            ],
-            'model_name' => [
+            'title' => [
                 'en' => $this->faker->word,
                 'ar' => $this->faker->word,
             ],

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources\products\BrandResource\Pages;
+namespace App\Filament\Resources\Products\BrandResource\Pages;
 
-use App\Filament\Resources\products\BrandResource;
+use App\Filament\Resources\Products\BrandResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
 

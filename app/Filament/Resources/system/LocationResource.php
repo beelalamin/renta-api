@@ -3,15 +3,13 @@
 namespace App\Filament\Resources\System;
 
 use App\Filament\Resources\System\LocationResource\Pages;
-use App\Filament\Resources\System\LocationResource\RelationManagers;
 use App\Models\System\Location;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+
 
 class LocationResource extends Resource
 {

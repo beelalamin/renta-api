@@ -1,18 +1,15 @@
 <?php
 
-namespace App\Filament\Resources\products;
+namespace App\Filament\Resources\Products;
 
-use App\Filament\Resources\products\BrandResource\Pages;
-use App\Filament\Resources\products\BrandResource\RelationManagers;
-use App\Models\products\Brand;
+use App\Filament\Resources\Products\BrandResource\Pages;
+use App\Models\Products\Brand;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Concerns\Translatable;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class BrandResource extends Resource
 {
@@ -27,9 +24,8 @@ class BrandResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('brand_name')
+                Forms\Components\TextInput::make('name')
                     ->required(),
-                Forms\Components\TextInput::make('model_name'),
             ]);
     }
 
@@ -37,10 +33,7 @@ class BrandResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('brand_name')
-                    ->label('Brand'),
-                Tables\Columns\TextColumn::make('model_name')
-                    ->label('Model'),
+                Tables\Columns\TextColumn::make('name'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
