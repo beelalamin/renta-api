@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\products;
+namespace App\Models\Products;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,13 +11,11 @@ class Brand extends Model
     use HasFactory;
     use HasTranslations;
     protected $fillable = [
-        'brand_name',
-        'model_name',
+        'title',
     ];
 
     protected $translatable = [
-        'brand_name',
-        'model_name',
+        'title',
     ];
 
     protected static function newFactory()

@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Filament\Resources\products;
+namespace App\Filament\Resources\Products;
 
-use App\Filament\Resources\products\CategoryResource\Pages;
-use App\Filament\Resources\products\CategoryResource\RelationManagers;
-use App\Models\products\Category;
+use App\Filament\Resources\Products\CategoryResource\Pages;
+use App\Models\Products\Category;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Concerns\Translatable;
@@ -12,7 +11,6 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class CategoryResource extends Resource
 {

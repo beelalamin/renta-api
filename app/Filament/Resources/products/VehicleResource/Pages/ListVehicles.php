@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources\products\VehicleResource\Pages;
+namespace App\Filament\Resources\Products\VehicleResource\Pages;
 
-use App\Filament\Resources\products\VehicleResource;
+use App\Filament\Resources\Products\VehicleResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
@@ -20,5 +20,5 @@ class ListVehicles extends ListRecords
         ];
     }
 
-   
+
 }

@@ -1,17 +1,15 @@
 <?php
 
-namespace App\Models\products;
+namespace App\Models\Products;
 
-use App\Models\shop\Booking;
+use App\Models\Shop\Booking;
 use App\Models\User;
 use Awcodes\Curator\Models\Media;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Auth;
-use Spatie\QueryBuilder\Filters\Filter;
 use Spatie\Translatable\HasTranslations;
 
 class Vehicle extends Model
@@ -28,12 +26,12 @@ class Vehicle extends Model
         'price',
         'brand_id',
         'thumbnail_id',
-        'images',
         'vehicle_number',
-        'quantity',
         'transmission',
-        'booking_type',
-        'attributes',
+        'fuel_type',
+        'model',
+        'seating_capicity',
+        'mileage',
         'is_featured',
         'is_published',
     ];

@@ -15,17 +15,18 @@ return new class extends Migration {
             $table->json('title');
             $table->json('description');
             $table->decimal('price', 10, 2)->nullable();
-            $table->string('vehicle_number')->unique();
             $table->foreignId('brand_id')->nullable()->constrained('brands');
             $table->foreignId('thumbnail_id')->nullable()->constrained('media');
-            $table->boolean('status')->default(false); // availability 
             $table->enum('transmission', ['manual', 'automatic'])->nullable();
-            $table->json('attributes')->nullable();
-            $table->enum('booking_type', ['rental', 'subscription', 'both'])->nullable();
+            $table->enum('fuel_type', ['gasoline', 'hybrid', 'electric'])->nullable();
+            $table->string('model')->nullable();
+            $table->integer('seating_capacity')->nullable();
+            $table->decimal('mileage', 4, 2)->nullable();
+            $table->string('vehicle_number');
             $table->boolean('is_featured')->default(false);
             $table->boolean('is_published')->default(false);
-            $table->foreignId('created_by')->constrained('users');
-            $table->foreignId('updated_by')->constrained('users');
+            $table->foreignId('created_by')->constrained('users')->nullOnDelete();
+            $table->foreignId('updated_by')->constrained('users')->nullOnDelete();
             $table->timestamps();
         });
     }

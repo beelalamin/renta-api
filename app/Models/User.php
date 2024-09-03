@@ -2,16 +2,12 @@
 
 namespace App\Models;
 
-
-use App\Models\shop\Booking;
-use App\Models\shop\Customer;
-use App\Models\shop\Payment;
+use App\Models\Shop\Booking;
+use App\Models\Shop\Payment;
 use App\Models\system\Provider;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -30,6 +26,12 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
         'name',
         'email',
         'password',
+      //  'role_id',
+        'country',
+        'state',
+        'city',
+        'street_address',
+        'flight_number',
     ];
 
     /**
@@ -55,25 +57,14 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
         ];
     }
 
-    public function customer(): HasOne
+    public function bookings(): HasMany
     {
-        return $this->hasOne(Customer::class);
+        return $this->hasMany(Booking::class);
     }
 
-    // User.php
-    public function customers(): HasMany
+    public function payments(): HasMany
     {
-        return $this->hasMany(Customer::class);
-    }
-
-    public function bookings(): HasManyThrough
-    {
-        return $this->hasManyThrough(Booking::class, Customer::class);
-    }
-
-    public function payments(): HasManyThrough
-    {
-        return $this->hasManyThrough(Customer::class, Payment::class);
+        return $this->hasMany(Payment::class);
     }
 
     public function providers()

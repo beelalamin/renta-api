@@ -2,10 +2,14 @@
 
 namespace Database\Seeders;
 
- 
+
 use App\Models\Products\Brand;
 use App\Models\Products\Category;
 use App\Models\Products\Vehicle;
+use App\Models\Shop\Booking;
+use App\Models\Shop\Payment;
+use App\Models\System\Location;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -15,14 +19,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Seed the Brand table
-        Brand::factory(10)->create();
 
-        // Seed the Category table
-        Category::factory(10)->create();
+        User::factory(10)->create();
+        // Brand::factory(5)->create();
+        Category::factory(8)->create();
+        Vehicle::factory(30)->create();
 
-        
-        // Seed the Vehicle table
-        Vehicle::factory(50)->create();
     }
 }

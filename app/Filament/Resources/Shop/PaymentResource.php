@@ -2,17 +2,16 @@
 
 namespace App\Filament\Resources\Shop;
 
+use App\Filament\Resources\BookingResource\RelationManagers\PaymentsRelationManager;
 use App\Filament\Resources\Shop\PaymentResource\Pages;
-use App\Filament\Resources\Shop\PaymentResource\RelationManagers;
-use App\Models\shop\Customer;
 use App\Models\Shop\Payment;
 use Filament\Forms;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+
 
 class PaymentResource extends Resource
 {
@@ -28,22 +27,19 @@ class PaymentResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('amount')
-                    ->prefix('QAR')
-                    ->label('Paid Amount')
-                    ->numeric()
-                    ->required(),
-                Forms\Components\Select::make('customer_id')
+                Forms\Components\Select::make('user_id')
                     ->label('Customer')
-                    ->options(function () {
-                        return Customer::with('user')
-                            ->get()
-                            ->pluck('user.name', 'id');
-                    })
+                    //->options(User::all()->pluck('name', 'id'))
+                    ->relationship('user', 'name')
                     ->required()
                     ->native(false)
                     ->searchable()
                     ->preload(),
+                Forms\Components\TextInput::make('amount')
+                    ->prefix('QAR')
+                    ->label('Total Amount')
+                    ->numeric()
+                    ->required(),
                 Forms\Components\Select::make('status')
                     ->options([
                         'pending' => 'Pending',
@@ -60,10 +56,18 @@ class PaymentResource extends Resource
                     ])
                     ->native(false)
                     ->required(),
+                Forms\Components\TextInput::make('booking_id'),
                 Forms\Components\TextInput::make('transaction_id')
-                    ->unique()
-                    ->columnSpanFull()
+                    ->unique(Payment::class, 'transaction_id', ignoreRecord: true)
                     ->required(),
+                Section::make('Subscription')
+                    ->description('Toggle for subscription only')
+                    ->schema([
+                        Forms\Components\Toggle::make('recurrent')
+                            ->default(false),
+
+                    ]),
+
             ]);
     }
 
@@ -71,7 +75,7 @@ class PaymentResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('customer.user.name')
+                Tables\Columns\TextColumn::make('user.name')
                     ->label('Customer'),
                 Tables\Columns\TextColumn::make('amount')
                     ->numeric()
@@ -86,6 +90,8 @@ class PaymentResource extends Resource
                     }),
                 Tables\Columns\TextColumn::make('method')
                     ->searchable(),
+                Tables\Columns\IconColumn::make('recurrent')
+                    ->boolean(),
                 Tables\Columns\TextColumn::make('transaction_id')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')

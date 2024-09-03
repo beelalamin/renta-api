@@ -1,22 +1,19 @@
 <?php
 
-namespace App\Filament\Resources\products;
+namespace App\Filament\Resources\Products;
 
-use App\Filament\Resources\products\VehicleResource\Pages;
-use App\Models\products\Vehicle;
+use App\Filament\Resources\Products\VehicleResource\Pages;
+use App\Models\Products\Vehicle;
 use Awcodes\Curator\Components\Forms\CuratorPicker;
 use Awcodes\Curator\Components\Tables\CuratorColumn;
 use Filament\Forms;
 use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Split;
 use Filament\Forms\Form;
 use Filament\Resources\Concerns\Translatable;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-
-use function Pest\Laravel\options;
 
 class VehicleResource extends Resource
 {
@@ -46,24 +43,27 @@ class VehicleResource extends Resource
                         ->suffix('per day')
                         ->prefix('QAR'),
 
-                    Forms\Components\Select::make('category_id')
+                    Forms\Components\Select::make('categories')
                         ->relationship('categories', 'title')
-                        ->label('Category')
                         ->native(false)
                         ->searchable()
                         ->preload()
                         ->multiple()
                         ->required(),
                     Forms\Components\Select::make('brand_id')
-                        ->relationship('brand', 'brand_name')
+                        ->relationship('brand', 'name')
                         ->native(false)
                         ->preload()
                         ->searchable()
                         ->label('Brand'),
-                    Forms\Components\TextInput::make('vehicle_number')
-                        ->label('Vehicle Number')
-                        ->required(),
 
+                    Forms\Components\TextInput::make('vehicle_number')
+                        ->default('VHN-' . random_int(100000, 999999))
+                        ->disabled()
+                        ->dehydrated()
+                        ->required()
+                        ->maxLength(32)
+                        ->unique(Vehicle::class, 'vehicle_number', ignoreRecord: true),
                 ])->columns(2),
 
                 Forms\Components\Section::make('Media')
@@ -92,31 +92,51 @@ class VehicleResource extends Resource
                             ->label('Transmission')
                             ->required(),
 
-                        Forms\Components\Select::make('booking_type')
+                        Forms\Components\Select::make('fuel_type')
                             ->options([
-                                'rental' => 'Rental',
-                                'subscription' => 'Subscription',
-                                'both' => 'Both',
+                                'gasoline' => 'Gasoline',
+                                'hybrid' => 'Hybrid',
+                                'electric' => 'Electric',
                             ])
                             ->native(false)
+                            ->label('Type')
                             ->required(),
 
-                        Repeater::make('attributes')
-                            ->schema([
-                                Forms\Components\TextInput::make('name')->required(),
-                                Forms\Components\TextInput::make('value')->required(),
-                            ])->columns(2)
-                            ->addActionLabel('Add Attribute')
-                            ->defaultItems(2)
-                            ->collapsible()
-                            ->cloneable()
-                    ]),
+                        Forms\Components\TextInput::make('model')
+                            ->numeric()
+                            ->maxLength(4)
+                            ->minValue(2000)
+                            ->rule('max:' . now()->year),
+                        Forms\Components\Select::make('seating_capicity')
+                            ->options([
+                                2 => 2,
+                                4 => 4,
+                                5 => 5,
+                                6 => 6,
+                                8 => 8,
+                            ])
+                            ->default(2)
+                            ->native(false),
+                        Forms\Components\TextInput::make('mileage')
+                            ->maxValue(60.0)
+                            ->default(5.6)
+                            ->numeric()
+                            ->reactive()
+                            ->suffix('km/ltr')
 
+                    ])->columns(2),
                     Forms\Components\Section::make([
-                        Forms\Components\Toggle::make('status')
-                            ->label('Availablity'),
-                        Forms\Components\Toggle::make('isFeatured'),
-                        Forms\Components\Toggle::make('isPublished'),
+                        Forms\Components\Toggle::make('isPublished')
+                            ->reactive()
+                            ->afterStateUpdated(function (callable $get, callable $set) {
+                                if (!$get('isPublished')) {
+                                    $set('isFeatured', false);
+                                }
+                            }),
+
+                        Forms\Components\Toggle::make('isFeatured')
+                            ->reactive()
+                            ->disabled(fn(callable $get) => !$get('isPublished')),
                     ])->grow(false),
                 ])->from('md')->columnSpanFull(),
             ]);
@@ -129,26 +149,20 @@ class VehicleResource extends Resource
                 CuratorColumn::make('thumbnail')
                     ->size(65)
                     ->square(),
+                Tables\Columns\TextColumn::make('vehicle_number')
+                    ->badge()
+                    ->color('gray'),
                 Tables\Columns\TextColumn::make('title')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('price')
                     ->money('QAR')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('booking_type')
-                    ->badge()
-                    ->color(fn(string $state): string => match ($state) {
-                        'both' => 'gray',
-                        'rental' => 'warning',
-                        'subscription' => 'success',
-                    }),
-                Tables\Columns\TextColumn::make('brand.brand_name'),
-                Tables\Columns\TextColumn::make('vehicle_number')
-                    ->badge()
-                    ->color('gray')
-                    ->prefix('QAR'),
-                Tables\Columns\IconColumn::make('status')
-                    ->label('Availability')
-                    ->boolean(),
+                Tables\Columns\TextColumn::make('brand.name'),
+                Tables\Columns\TextColumn::make('fuel_type'),
+                Tables\Columns\TextColumn::make('transmission'),
+                Tables\Columns\TextColumn::make('seating_capicity'),
+                Tables\Columns\TextColumn::make('mileage')
+                    ->suffix('km/ltr'),
                 Tables\Columns\IconColumn::make('is_published')
                     ->label('Published')
                     ->boolean(),

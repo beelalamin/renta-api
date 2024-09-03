@@ -12,8 +12,7 @@ return new class extends Migration {
     {
         Schema::create('brands', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->json('brand_name');
-            $table->json('model_name');
+            $table->json('title');
             $table->timestamps();
         });
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\system;
+namespace App\Filament\Resources\System;
 ;
 
 use Filament\Forms;
@@ -9,16 +9,14 @@ use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
-use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\system\UserResource\Pages;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\UserResource\RelationManagers;
 
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-users';
+    protected static ?string $navigationIcon = 'heroicon-o-user-group';
+
     protected static ?string $navigationGroup = 'System';
     protected static ?int $navigationSort = 1;
 
@@ -33,6 +31,14 @@ class UserResource extends Resource
                     ->maxLength(255),
                 Forms\Components\TextInput::make('password')->required()
                     ->maxLength(255),
+                Forms\Components\TextInput::make('country'),
+                Forms\Components\TextInput::make('state')
+                    ->required(),
+                Forms\Components\TextInput::make('city')
+                    ->required(),
+                Forms\Components\TextInput::make('street_address')
+                    ->required(),
+                Forms\Components\TextInput::make('flight_number'),
             ]);
     }
 
@@ -42,7 +48,7 @@ class UserResource extends Resource
             ->columns([
                 Tables\Columns\ImageColumn::make('providers.avatar')
                     ->label('Avatar')
-                    ->defaultImageUrl(url('./storage/app/public/media/avatar-placeholder.png'))
+                    ->defaultImageUrl(asset('storage/media/avatar-placeholder.png'))
                     ->circular(),
                 Tables\Columns\TextColumn::make('name')->searchable(),
                 Tables\Columns\TextColumn::make('email'),
@@ -54,8 +60,16 @@ class UserResource extends Resource
                         'github' => 'warning',
                         'google' => 'success',
                         'email' => 'gray',
-                    })
-                ,
+                    }),
+                // Tables\Columns\TextColumn::make('country'),
+                // Tables\Columns\TextColumn::make('state')
+                //     ->searchable(),
+                // Tables\Columns\TextColumn::make('city')
+                //     ->searchable(),
+                // Tables\Columns\TextColumn::make('street_address')
+                //     ->searchable(),
+                // Tables\Columns\TextColumn::make('flight_number')
+                //     ->searchable(),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Joining Date')

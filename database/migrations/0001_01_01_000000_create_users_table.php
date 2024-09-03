@@ -14,14 +14,14 @@ return new class extends Migration {
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->foreignId('customer_id')->nullable()->constrained('customers')->onDelete('cascade');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
-            
-            $table->string('provider')->nullable();
-            $table->string('provider_id')->nullable();
-            $table->string('provider_token')->nullable();
-
+            // $table->foreignId('role_id')->nullable()->constrained('roles')->onDelete('cascade');
+            $table->string('country')->nullable();
+            $table->string('state')->nullable();
+            $table->string('city')->nullable();
+            $table->string('street_address')->nullable();
+            $table->string('flight_number')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

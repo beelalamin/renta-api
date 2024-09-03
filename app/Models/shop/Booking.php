@@ -1,37 +1,42 @@
 <?php
 
-namespace App\Models\shop;
+namespace App\Models\Shop;
 
 use App\Models\shop\Payment;
 use App\Models\products\Vehicle;
 use App\Models\system\Location;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\HasOneThrough;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Booking extends Model
 {
-    use HasFactory;
+    use HasFactory, HasTimestamps;
 
     protected $fillable = [
-        'customer_id',
+        'user_id',
         'vehicle_id',
-        'type',
         'protection',
         'status',
-        'total_amount',
+        'booking_type',
+        'booking_number',
         'mileage',
         'infant_seat',
-        'additional_driver',
-        'payment_id',
-        'location_id',
-        'total_amount',
-        'pickup_at',
-        'return_at',
+        'driver',
+        'is_active',
+        'note',
+        'pickup_location_id',
+        'return_location_id',
+        'pickup_date',
+        'return_date',
+        'subscription_plan',
+        'billing_cycle',
+        'next_billing_date',
+        'auto_renewal',
+        'last_notified',
     ];
 
 
@@ -40,18 +45,23 @@ class Booking extends Model
         return $this->belongsTo(Vehicle::class);
     }
 
-    public function payment(): BelongsTo
+    public function payments(): HasMany
     {
-        return $this->belongsTo(Payment::class);
+        return $this->hasMany(Payment::class);
     }
 
-    public function customer(): BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(Customer::class);
+        return $this->belongsTo(User::class);
     }
 
-    public function location(): BelongsTo
+    public function pickupLocation()
     {
-        return $this->belongsTo(Location::class);
+        return $this->belongsTo(Location::class, 'pickup_location_id');
+    }
+
+    public function returnLocation()
+    {
+        return $this->belongsTo(Location::class, 'return_location_id');
     }
 }

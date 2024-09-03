@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Models\system;
+namespace App\Models\System;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Translatable\HasTranslations;
 
 class Location extends Model
 {
-     use HasFactory;
+    use HasFactory;
 
     protected $fillable = [
         'name',
